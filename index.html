@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kamus Mandarin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: 'Jakarta Sans', sans-serif; }
+    body {
+      margin: 0;
+      background: #c4f5d2;
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #1a1a1a;
+      color: #eee;
+    }
+    h1 {
+      text-align: center;
+      color: #104b2c;
+    }
+    body.dark h1 {
+      color: #fff;
+    }
+    .toggle-mode {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: white;
+      color: #104b2c;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 15px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 15px;
+      margin-top: 60px;
+    }
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      position: relative;
+    }
+    body.dark .card {
+      background: #333;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      cursor: pointer;
+    }
+    .hanzi {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #104b2c;
+    }
+    .pinyin {
+      color: #406b4a;
+      font-size: 1rem;
+    }
+    .indo {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 5px;
+    }
+    .icons {
+      display: none;
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #444;
+    }
+    .card.active .icons {
+      display: block;
+    }
+    .icon-btn {
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    @media (max-width: 600px) {
+      .hanzi { font-size: 1.2rem; }
+      .pinyin, .indo { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-mode" onclick="toggleDarkMode()">🌓 Mode</button>
+  <h1>Kamus Percakapan Mandarin (500 Kalimat)</h1>
+  <div class="container" id="cardContainer"></div>
+
+  <script src="kamus_mandarin_500_full.js"></script>
+  <script>
+    const container = document.getElementById("cardContainer");
+
+    kamusMandarin.forEach((item, idx) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="hanzi">${item.hanzi}</div>
+        <div class="pinyin">${item.pinyin}</div>
+        <div class="indo">${item.indonesia}</div>
+        <div class="icons">
+          <span class="icon-btn" onclick="speak('${item.hanzi}')">🔊</span>
+          <span class="icon-btn">⭐</span>
+          <span class="icon-btn">📌</span>
+        </div>
+      `;
+      card.addEventListener("click", () => card.classList.toggle("active"));
+      container.appendChild(card);
+    });
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "zh-CN";
+      speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>
