@@ -1,0 +1,2 @@
+# kamus_mandarin_500_darkmode_voice
+kamus_mandarin_500_darkmode_voice
